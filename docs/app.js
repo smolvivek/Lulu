@@ -7,9 +7,9 @@
   var SIZES = 'max(100vw, 177.78vh)'; // 16:9 image covering the screen: portrait phones render it wider than the viewport
 
   var $ = function (id) { return document.getElementById(id); };
-  var framesEl = $('frames'), thumbsEl = $('thumbs'), nowText = $('nowText'), nowEl = $('now');
+  var framesEl = $('frames'), nowText = $('nowText'), nowEl = $('now');
   var seekEl = $('seek'), volEl = $('vol');
-  var scenes = [], frames = [], thumbs = [];
+  var scenes = [], frames = [];
   var cur = -1, entered = false;
   var player = null, ready = false, wantPlay = false, apiReady = false, dataReady = false;
   var queue = [], qi = 0, errStreak = 0, ytFailed = false, loadedId = null;
@@ -50,21 +50,6 @@
       framesEl.appendChild(img);
       frames.push(img);
 
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'thumb';
-      b.title = s.genre;
-      b.setAttribute('aria-label', s.name + ', ' + s.genre);
-      var t = document.createElement('img');
-      t.src = 'img/' + s.id + '-900.webp';
-      t.alt = '';
-      t.loading = 'lazy';
-      t.decoding = 'async';
-      t.style.objectPosition = s.focal + '% 50%';
-      b.appendChild(t);
-      b.addEventListener('click', function () { setScene(i); });
-      thumbsEl.appendChild(b);
-      thumbs.push(b);
     });
   }
 
@@ -74,9 +59,6 @@
     cur = i;
     var s = scenes[i];
     frames.forEach(function (f, k) { f.classList.toggle('is-active', k === i); });
-    thumbs.forEach(function (d, k) {
-      if (k === i) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
-    });
     try { history.replaceState(null, '', '#' + s.id); } catch (e) {}
     document.title = 'Lulu - ' + s.genre;
     queue = shuffle(s.tracks); qi = 0; errStreak = 0;
@@ -233,7 +215,7 @@
     entered = true;
     document.body.classList.add('entered');
     loadCurrent(false); // inside the click, so browsers allow sound
-    var b = thumbs[cur]; if (b) b.focus({ preventScroll: true });
+    $('playBtn').focus({ preventScroll: true });
     poke();
     if ('mediaSession' in navigator) {
       var h = function (a, f) { try { navigator.mediaSession.setActionHandler(a, f); } catch (e) {} };
@@ -246,8 +228,15 @@
     document.body.classList.remove('idle');
     clearTimeout(idleTimer);
     if (entered) idleTimer = setTimeout(function () {
-      if (!document.body.classList.contains('video')) document.body.classList.add('idle');
-    }, 5000);
+      if (!document.body.classList.contains('video') && $('more').hidden) document.body.classList.add('idle');
+    }, 3000);
+  }
+
+  function toggleMore(force) {
+    var open = typeof force === 'boolean' ? force : $('more').hidden;
+    $('more').hidden = !open;
+    $('moreBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
+    poke();
   }
 
   function toggleVideo() {
@@ -267,6 +256,7 @@
     $('prevScene').addEventListener('click', function () { setScene(cur - 1); });
     $('nextScene').addEventListener('click', function () { setScene(cur + 1); });
     $('vidBtn').addEventListener('click', toggleVideo);
+    $('moreBtn').addEventListener('click', function () { toggleMore(); });
 
     seekEl.addEventListener('input', function () {
       seeking = true; setFill(seekEl);
@@ -288,6 +278,7 @@
 
     document.addEventListener('keydown', function (e) {
       poke();
+      if (e.key === 'Escape') toggleMore(false);
       if (!entered || e.metaKey || e.ctrlKey || e.altKey) return;
       if (e.target.tagName === 'INPUT') return;
       if (e.key === 'ArrowRight') { setScene(cur + 1); e.preventDefault(); }
@@ -304,7 +295,7 @@
 
     var x0 = null, y0 = 0;
     $('stage').addEventListener('pointerdown', function (e) {
-      if (!entered || e.target.closest('button, input, a, .yt-host')) { x0 = null; return; }
+      if (!entered || e.target.closest('button, input, a, .yt-host, .more')) { x0 = null; return; }
       x0 = e.clientX; y0 = e.clientY;
     });
     $('stage').addEventListener('pointerup', function (e) {
