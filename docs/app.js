@@ -94,7 +94,6 @@
     cur = i;
     var s = scenes[i];
     frames.forEach(function (f, k) { f.classList.toggle('is-active', k === i); });
-    try { history.replaceState(null, '', '#' + s.id); } catch (e) {}
     document.title = 'Lulu - ' + s.genre;
     queue = mix(s.tracks); qi = 0; errStreak = 0;
     showNow(queue[0]);
