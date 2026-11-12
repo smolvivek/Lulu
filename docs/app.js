@@ -104,7 +104,7 @@
     cur = i;
     var s = scenes[i];
     frames.forEach(function (f, k) { f.classList.toggle('is-active', k === i); });
-    document.title = 'Lulu - ' + s.genre;
+    document.title = 'Lulu-fm - ' + s.genre;
     queue = mix(s.tracks); qi = 0; errStreak = 0;
     showNow(queue[0]);
     loadFull(i);
@@ -122,7 +122,7 @@
     if ('mediaSession' in navigator && window.MediaMetadata && scenes[cur]) {
       try {
         navigator.mediaSession.metadata = new MediaMetadata({
-          title: t.title, artist: t.artist, album: 'Lulu, ' + scenes[cur].genre,
+          title: t.title, artist: t.artist, album: 'Lulu-fm, ' + scenes[cur].genre,
           artwork: [{ src: 'img/' + scenes[cur].id + '-900.webp', sizes: '900x563', type: 'image/webp' }]
         });
       } catch (e) {}
