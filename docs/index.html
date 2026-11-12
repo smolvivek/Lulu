@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Lulu</title>
-<meta name="description" content="A white cat, six scenes from her day, and the music that goes with each.">
+<title>Lulu - a day in six scenes, scored by my music</title>
+<meta name="description" content="Lulu the cat through one day in six illustrated scenes, each with the music I actually listen to.">
 <meta name="theme-color" content="#14100d">
-<meta property="og:title" content="Lulu">
-<meta property="og:description" content="A white cat, six scenes from her day, and the music that goes with each.">
+<meta property="og:title" content="Lulu - a day in six scenes, scored by my music">
+<meta property="og:description" content="Lulu the cat through one day in six illustrated scenes, each with the music I actually listen to.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://smolvivek.github.io/Lulu/img/rain-1600.webp">
 <meta name="twitter:card" content="summary_large_image">
@@ -15,7 +15,7 @@
 <link rel="preload" as="image" href="img/kitchen-1600.webp" imagesrcset="img/kitchen-900.webp 900w, img/kitchen-1600.webp 1600w, img/kitchen-2560.webp 2560w, img/kitchen-3840.webp 3840w" imagesizes="max(100vw, 177.78vh)" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,400..600&family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@400;500&display=swap">
 <link rel="stylesheet" href="site.css">
 </head>
 <body>
@@ -23,23 +23,36 @@
   <div class="frames" id="frames"></div>
   <div class="scrim" aria-hidden="true"></div>
 
-  <section class="ui" id="ui" aria-label="Scene and music">
-    <div class="info">
-      <p class="genre" id="genre"></p>
-      <h2 class="scene-name" id="sceneName"></h2>
-      <p class="line" id="sceneLine"></p>
-      <p class="now" id="now" aria-live="polite"><span class="eq" id="eq" aria-hidden="true"><i></i><i></i><i></i></span><span id="nowText"></span></p>
+  <button class="edge edge-l" id="prevScene" type="button" aria-label="Previous scene"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" /></svg></button>
+  <button class="edge edge-r" id="nextScene" type="button" aria-label="Next scene"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7" /></svg></button>
+
+  <section class="ui" id="ui" aria-label="Music and scenes">
+    <p class="now" id="now" aria-live="polite"><span class="eq" aria-hidden="true"><i></i><i></i><i></i></span><span id="nowText"></span></p>
+
+    <div class="seek">
+      <span class="time" id="tCur">0:00</span>
+      <input class="range" id="seek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+      <span class="time" id="tDur">0:00</span>
     </div>
+
     <div class="bar">
-      <nav class="dots" id="dots" aria-label="Scenes"></nav>
+      <nav class="thumbs" id="thumbs" aria-label="Scenes"></nav>
       <div class="controls">
-        <button class="ctl" id="playBtn" type="button" aria-label="Play" aria-pressed="false">
+        <button class="ctl" id="prevBtn" type="button" aria-label="Previous track" title="Previous track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 5.5v13l-9-6.5zM5.5 5H8v14H5.5z"/></svg></button>
+        <button class="ctl ctl-main" id="playBtn" type="button" aria-label="Play" aria-pressed="false" title="Play / pause">
           <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
           <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
         </button>
-        <button class="ctl" id="nextBtn" type="button" aria-label="Next track">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5.5v13l9-6.5zM16.5 5H19v14h-2.5z"/></svg>
-        </button>
+        <button class="ctl" id="nextBtn" type="button" aria-label="Next track" title="Next track"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5.5v13l9-6.5zM16.5 5H19v14h-2.5z"/></svg></button>
+        <div class="vol">
+          <button class="ctl" id="muteBtn" type="button" aria-label="Mute" title="Mute">
+            <svg class="i-vol" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5l4.5 3.8V5.7L7.5 9.5zM15 9a4 4 0 010 6M17.3 6.7a7.3 7.3 0 010 10.6" class="stroke"/></svg>
+            <svg class="i-mute" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5l4.5 3.8V5.7L7.5 9.5zM15.5 9.5l5 5M20.5 9.5l-5 5" class="stroke"/></svg>
+          </button>
+          <input class="range vol-range" id="vol" type="range" min="0" max="100" value="80" step="1" aria-label="Volume">
+        </div>
+        <button class="ctl" id="vidBtn" type="button" aria-label="Show video" aria-pressed="false" title="Show video"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 6.5h13v11h-13zM16.5 10.5l4-2.5v8l-4-2.5z"/></svg></button>
+        <a class="ctl" id="ytLink" href="https://www.youtube.com/" target="_blank" rel="noopener" aria-label="Open on YouTube" title="Open on YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H5v14h14v-4M13 5h6v6M19 5l-8 8" class="stroke"/></svg></a>
       </div>
     </div>
   </section>
@@ -47,13 +60,13 @@
   <section class="enter" id="enter" aria-labelledby="enterTitle">
     <div class="enter-inner">
       <h1 id="enterTitle">Lulu</h1>
-      <p>One white cat, six scenes from her day, and the music that goes with each.</p>
+      <p class="tag">A day in six scenes, scored by the music I actually listen to.</p>
       <button class="enter-btn" id="enterBtn" type="button">Enter</button>
       <p class="hint">Sound on.</p>
     </div>
   </section>
 
-  <div class="yt-host" aria-hidden="true"><div id="yt"></div></div>
+  <div class="yt-host" id="ytHost"><div id="yt"></div></div>
 </main>
 <noscript><p class="nojs">Lulu needs JavaScript to show its scenes and play music.</p></noscript>
 <script src="app.js"></script>
