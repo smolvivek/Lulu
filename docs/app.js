@@ -25,6 +25,41 @@
     }
     return a;
   }
+  // liked songs (flag 1) surface about one pick in three; the rest of the catalogue fills in between
+  function mix(tracks) {
+    var liked = shuffle(tracks.filter(function (t) { return t.like; }));
+    var rest = shuffle(tracks.filter(function (t) { return !t.like; }));
+    var out = [], a = 0, b = 0;
+    while (a < liked.length || b < rest.length) {
+      if (a < liked.length && (b >= rest.length || out.length % 3 === 0)) out.push(liked[a++]);
+      else out.push(rest[b++]);
+    }
+    return out;
+  }
+  // each scene's full catalogue is a separate file, fetched when the scene opens
+  function loadFull(i) {
+    var sc = scenes[i];
+    if (sc.fullP) return sc.fullP;
+    sc.fullP = fetch('data/' + sc.id + '.json')
+      .then(function (r) { return r.json(); })
+      .then(function (rows) {
+        var seen = {}, all = [];
+        sc.tracks.forEach(function (t) { t.like = 1; seen[t.yt] = 1; all.push(t); });
+        rows.forEach(function (r) {
+          if (seen[r[0]]) return;
+          seen[r[0]] = 1;
+          all.push({ yt: r[0], title: r[1], artist: r[2], like: r[3] });
+        });
+        sc.tracks = all; sc.full = true;
+        if (cur === i && queue.length) {
+          var played = queue.slice(0, qi + 1), used = {};
+          played.forEach(function (t) { used[t.yt] = 1; });
+          queue = played.concat(mix(all.filter(function (t) { return !used[t.yt]; })));
+        }
+      })
+      .catch(function () { sc.fullP = null; });
+    return sc.fullP;
+  }
   function fmt(s) {
     s = Math.max(0, Math.floor(s || 0));
     return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
@@ -61,8 +96,9 @@
     frames.forEach(function (f, k) { f.classList.toggle('is-active', k === i); });
     try { history.replaceState(null, '', '#' + s.id); } catch (e) {}
     document.title = 'Lulu - ' + s.genre;
-    queue = shuffle(s.tracks); qi = 0; errStreak = 0;
+    queue = mix(s.tracks); qi = 0; errStreak = 0;
     showNow(queue[0]);
+    loadFull(i);
     if (entered) loadCurrent(true);
     else if (ready) cueCurrent();
   }
@@ -134,7 +170,7 @@
   function nextTrack() {
     if (!queue.length) return;
     qi++;
-    if (qi >= queue.length) { queue = shuffle(scenes[cur].tracks); qi = 0; }
+    if (qi >= queue.length) { queue = mix(scenes[cur].tracks); qi = 0; }
     loadCurrent(true);
   }
 
