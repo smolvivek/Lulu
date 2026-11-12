@@ -35,7 +35,7 @@
   }
 
   /* ---------- scenes ---------- */
-  function buildScenes() {
+  function buildScenes(first) {
     scenes.forEach(function (s, i) {
       var img = document.createElement('img');
       img.className = 'frame';
@@ -46,7 +46,7 @@
       img.decoding = 'async';
       img.draggable = false;
       img.style.objectPosition = s.focal + '% 50%';
-      if (i === 0) img.fetchPriority = 'high';
+      if (i === first) img.fetchPriority = 'high';
       framesEl.appendChild(img);
       frames.push(img);
 
@@ -87,6 +87,7 @@
   function resetSeek() {
     seekEl.value = 0; setFill(seekEl);
     $('tCur').textContent = '0:00'; $('tDur').textContent = '0:00';
+    $('ring').style.strokeDashoffset = '103.7';
   }
 
   function cueCurrent() {
@@ -102,11 +103,32 @@
     var t = queue[qi];
     if (!t) return;
     showNow(t);
+    armStall();
     if (!ready) { wantPlay = true; return; }
     if (!force && loadedId === t.yt) { player.playVideo(); return; }
     loadedId = t.yt;
     resetSeek();
     player.loadVideoById(t.yt);
+  }
+
+  // If sound hasn't started a few seconds after a play request, reveal the real
+  // YouTube player: whatever it is waiting on (ad, prompt, autoplay block) becomes visible and clickable.
+  var stallTimer = null, autoVideo = false;
+  function setVideo(on) {
+    document.body.classList.toggle('video', on);
+    var b = $('vidBtn');
+    b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    b.setAttribute('aria-label', on ? 'Hide video' : 'Show video');
+    b.title = on ? 'Hide video' : 'Show video';
+  }
+  function armStall() {
+    clearTimeout(stallTimer);
+    stallTimer = setTimeout(function () {
+      if (document.body.classList.contains('playing') || ytFailed) return;
+      if (!document.body.classList.contains('video')) { autoVideo = true; setVideo(true); }
+      nowText.textContent = 'Starting. If nothing plays, press play on the video.';
+      nowEl.hidden = false;
+    }, 4000);
   }
 
   function nextTrack() {
@@ -139,7 +161,12 @@
 
   function onStateChange(e) {
     var st = e.data;
-    if (st === 1) { setPlaying(true); errStreak = 0; applyVolume(); }
+    if (st === 1) {
+      setPlaying(true); errStreak = 0; applyVolume();
+      clearTimeout(stallTimer);
+      if (autoVideo) { autoVideo = false; setVideo(false); }
+      if (queue[qi]) showNow(queue[qi]);
+    }
     else if (st === 2 || st === 5 || st === -1) setPlaying(false);
     else if (st === 0) { setPlaying(false); nextTrack(); }
   }
@@ -163,6 +190,7 @@
     seekEl.value = Math.round(c / d * 1000); setFill(seekEl);
     $('tCur').textContent = fmt(c);
     $('tDur').textContent = fmt(d);
+    $('ring').style.strokeDashoffset = String(103.7 * (1 - c / d));
   }, 400);
 
   /* volume */
@@ -215,7 +243,6 @@
     entered = true;
     document.body.classList.add('entered');
     loadCurrent(false); // inside the click, so browsers allow sound
-    $('playBtn').focus({ preventScroll: true });
     poke();
     if ('mediaSession' in navigator) {
       var h = function (a, f) { try { navigator.mediaSession.setActionHandler(a, f); } catch (e) {} };
@@ -228,24 +255,20 @@
     document.body.classList.remove('idle');
     clearTimeout(idleTimer);
     if (entered) idleTimer = setTimeout(function () {
-      if (!document.body.classList.contains('video') && $('more').hidden) document.body.classList.add('idle');
+      if (!document.body.classList.contains('video') && !$('dock').classList.contains('open')) document.body.classList.add('idle');
     }, 3000);
   }
 
   function toggleMore(force) {
-    var open = typeof force === 'boolean' ? force : $('more').hidden;
-    $('more').hidden = !open;
+    var open = typeof force === 'boolean' ? force : !$('dock').classList.contains('open');
+    $('dock').classList.toggle('open', open);
     $('moreBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
     poke();
   }
 
   function toggleVideo() {
-    var on = !document.body.classList.contains('video');
-    document.body.classList.toggle('video', on);
-    var b = $('vidBtn');
-    b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    b.setAttribute('aria-label', on ? 'Hide video' : 'Show video');
-    b.title = on ? 'Hide video' : 'Show video';
+    autoVideo = false;
+    setVideo(!document.body.classList.contains('video'));
   }
 
   function bindInput() {
@@ -318,6 +341,19 @@
   }
 
   /* ---------- start ---------- */
+  // the day, by local hour: morning kitchen, rain, ledge, paan tapri, sunset on Marine Drive, night
+  function sceneForNow() {
+    var h = new Date().getHours(), id;
+    if (h >= 5 && h < 10) id = 'kitchen';
+    else if (h >= 10 && h < 13) id = 'rain';
+    else if (h >= 13 && h < 16) id = 'ledge';
+    else if (h >= 16 && h < 18) id = 'paan';
+    else if (h >= 18 && h < 20) id = 'marine';
+    else id = 'night';
+    for (var i = 0; i < scenes.length; i++) if (scenes[i].id === id) return i;
+    return 0;
+  }
+
   try {
     var sv = JSON.parse(localStorage.getItem('lulu-vol') || 'null');
     if (sv) { volume = Math.min(100, Math.max(0, +sv.v)); muted = !!sv.m; }
@@ -329,10 +365,11 @@
     .then(function (r) { return r.json(); })
     .then(function (data) {
       scenes = data.scenes;
-      buildScenes();
-      bindInput();
       var start = indexFromHash();
-      setScene(start >= 0 ? start : 0);
+      if (start < 0) start = sceneForNow();
+      buildScenes(start);
+      bindInput();
+      setScene(start);
       dataReady = true;
       maybeCreatePlayer();
     })
