@@ -4,7 +4,7 @@
   'use strict';
 
   var WIDTHS = [900, 1600, 2560, 3840];
-  var SIZES = 'max(100vw, 177.78vh)'; // 16:9 image covering the screen: portrait phones render it wider than the viewport
+  var SIZES = '(max-aspect-ratio: 1/1) 100vw, max(100vw, 177.78vh)'; // 16:9 image covering the screen: portrait phones render it wider than the viewport
 
   var $ = function (id) { return document.getElementById(id); };
   var framesEl = $('frames'), nowText = $('nowText'), nowEl = $('now');
@@ -72,18 +72,28 @@
   /* ---------- scenes ---------- */
   function buildScenes(first) {
     scenes.forEach(function (s, i) {
+      var box = document.createElement('div');
+      box.className = 'frame';
+      var bg = document.createElement('img');
+      bg.className = 'bg';
+      bg.alt = '';
+      bg.setAttribute('aria-hidden', 'true');
+      bg.src = 'img/' + s.id + '-900.webp';
+      bg.decoding = 'async';
       var img = document.createElement('img');
-      img.className = 'frame';
+      img.className = 'fg';
       img.alt = s.name + ', ' + s.genre;
       img.srcset = srcset(s.id);
       img.sizes = SIZES;
       img.src = 'img/' + s.id + '-1600.webp';
       img.decoding = 'async';
       img.draggable = false;
-      img.style.objectPosition = s.focal + '% 50%';
+      box.style.setProperty('--fx', s.focal + '%');
       if (i === first) img.fetchPriority = 'high';
-      framesEl.appendChild(img);
-      frames.push(img);
+      box.appendChild(bg);
+      box.appendChild(img);
+      framesEl.appendChild(box);
+      frames.push(box);
 
     });
   }
