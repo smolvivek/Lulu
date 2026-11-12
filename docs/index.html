@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lulu</title>
+<meta name="description" content="A white cat, six scenes from her day, and the music that goes with each.">
+<meta name="theme-color" content="#14100d">
+<meta property="og:title" content="Lulu">
+<meta property="og:description" content="A white cat, six scenes from her day, and the music that goes with each.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://smolvivek.github.io/Lulu/img/rain-1600.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" as="image" href="img/kitchen-1600.webp" imagesrcset="img/kitchen-900.webp 900w, img/kitchen-1600.webp 1600w, img/kitchen-2560.webp 2560w, img/kitchen-3840.webp 3840w" imagesizes="max(100vw, 177.78vh)" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,SOFT,wght@9..144,100,400..600&family=Inter:wght@400;500&display=swap">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+<main class="stage" id="stage" aria-label="Lulu">
+  <div class="frames" id="frames"></div>
+  <div class="scrim" aria-hidden="true"></div>
+
+  <section class="ui" id="ui" aria-label="Scene and music">
+    <div class="info">
+      <p class="genre" id="genre"></p>
+      <h2 class="scene-name" id="sceneName"></h2>
+      <p class="line" id="sceneLine"></p>
+      <p class="now" id="now" aria-live="polite"><span class="eq" id="eq" aria-hidden="true"><i></i><i></i><i></i></span><span id="nowText"></span></p>
+    </div>
+    <div class="bar">
+      <nav class="dots" id="dots" aria-label="Scenes"></nav>
+      <div class="controls">
+        <button class="ctl" id="playBtn" type="button" aria-label="Play" aria-pressed="false">
+          <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+          <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/></svg>
+        </button>
+        <button class="ctl" id="nextBtn" type="button" aria-label="Next track">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5.5v13l9-6.5zM16.5 5H19v14h-2.5z"/></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="enter" id="enter" aria-labelledby="enterTitle">
+    <div class="enter-inner">
+      <h1 id="enterTitle">Lulu</h1>
+      <p>One white cat, six scenes from her day, and the music that goes with each.</p>
+      <button class="enter-btn" id="enterBtn" type="button">Enter</button>
+      <p class="hint">Sound on.</p>
+    </div>
+  </section>
+
+  <div class="yt-host" aria-hidden="true"><div id="yt"></div></div>
+</main>
+<noscript><p class="nojs">Lulu needs JavaScript to show its scenes and play music.</p></noscript>
+<script src="app.js"></script>
+</body>
+</html>

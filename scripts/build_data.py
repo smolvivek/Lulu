@@ -1,55 +1,75 @@
 """Builds docs/data/lulu.json from data/ids.txt (artist|title|youtube_id).
 
-Tracks are grouped into moods (what is happening in the apartment), not genres.
-Artists per mood come from the channels / artists followed on YouTube and Spotify.
+The site has six scenes, one frame each, ordered as a day: morning to night.
+Each scene is a genre; artists are assigned to the scene whose frame they fit,
+using the artists and channels followed on YouTube and Spotify.
 """
 import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 
-MOODS = [
-    {"id": "focused", "name": "Focused", "line": "Coffee, laptop, one cat on the desk.", "default": True},
-    {"id": "still", "name": "Still", "line": "Nobody is going anywhere.", "default": False},
-    {"id": "warm", "name": "Warm", "line": "Window seat. Golden light.", "default": False},
-    {"id": "wired", "name": "Wired", "line": "She is out the window again.", "default": False},
+# focal = where the cat / subject sits horizontally (CSS object-position x%),
+# so phones in portrait crop around her.
+SCENES = [
+    {"id": "kitchen", "name": "Kitchen", "genre": "Blues",
+     "line": "Something is on the stove.", "focal": 30},
+    {"id": "rain", "name": "Rain", "genre": "Ambient",
+     "line": "Nobody is going anywhere.", "focal": 48},
+    {"id": "ledge", "name": "The ledge", "genre": "Rock and metal",
+     "line": "She is out the window again.", "focal": 50},
+    {"id": "paan", "name": "Paan tapri", "genre": "Hip-hop",
+     "line": "Nap on the scooty.", "focal": 38},
+    {"id": "marine", "name": "Marine Drive", "genre": "Ghazal and Bollywood",
+     "line": "Sunset, the three of us.", "focal": 40},
+    {"id": "night", "name": "Terrace", "genre": "Jazz",
+     "line": "Lights on in every window.", "focal": 49},
 ]
 
 # first matching artist substring wins
-TRACK_MOOD = [
-    ("IDLES", "wired"), ("Sleep Token", "wired"), ("Whitechapel", "wired"),
-    ("Chelsea Grin", "wired"), ("Alex Terrible", "wired"), ("The Sword", "wired"),
-    ("Truckfighters", "wired"), ("Valley of the Sun", "wired"), ("Architects", "wired"),
-    ("Gang Starr", "wired"), ("Mobb Deep", "wired"), ("Beastie Boys", "wired"),
-    ("Jay-Z", "wired"), ("Skepta", "wired"), ("Cage", "wired"), ("Anderson", "wired"),
-    ("Bally Sagoo", "wired"),
-    ("Bill Evans", "still"), ("Chet Baker", "still"), ("William Basinski", "still"),
-    ("Harold Budd", "still"), ("Aphex Twin", "still"), ("Boards of Canada", "still"),
-    ("Global Communication", "still"), ("Four Tet", "still"), ("Debussy", "still"),
-    ("Dvořák", "still"), ("Clint Mansell", "still"),
-    ("Nusrat", "warm"), ("Asha Bhosle", "warm"), ("KK", "warm"),
-    ("Rodrigo", "warm"), ("Vangelis", "warm"), ("Nat King Cole", "warm"),
-    ("Wes Montgomery", "focused"), ("Django", "focused"), ("Sonny Rollins", "focused"),
-    ("Muddy Waters", "focused"), ("Stevie Ray Vaughan", "focused"), ("Johnny Winter", "focused"),
-    ("Orbital", "focused"), ("DJ Shadow", "focused"), ("Steve Reich", "focused"),
+TRACK_SCENE = [
+    # rock and metal
+    ("IDLES", "ledge"), ("Sleep Token", "ledge"), ("Whitechapel", "ledge"),
+    ("Chelsea Grin", "ledge"), ("Alex Terrible", "ledge"), ("The Sword", "ledge"),
+    ("Truckfighters", "ledge"), ("Valley of the Sun", "ledge"), ("Architects", "ledge"),
+    # hip-hop
+    ("Gang Starr", "paan"), ("Mobb Deep", "paan"), ("Beastie Boys", "paan"),
+    ("Jay-Z", "paan"), ("Skepta", "paan"), ("Cage", "paan"), ("Anderson", "paan"),
+    ("DJ Shadow", "paan"),
+    # ambient
+    ("William Basinski", "rain"), ("Harold Budd", "rain"), ("Aphex Twin", "rain"),
+    ("Boards of Canada", "rain"), ("Global Communication", "rain"), ("Four Tet", "rain"),
+    ("Debussy", "rain"), ("Dvořák", "rain"), ("Clint Mansell", "rain"),
+    ("Vangelis", "rain"), ("Orbital", "rain"), ("Steve Reich", "rain"),
+    # jazz
+    ("Bill Evans", "night"), ("Chet Baker", "night"), ("Wes Montgomery", "night"),
+    ("Django", "night"), ("Sonny Rollins", "night"), ("Nat King Cole", "night"),
+    ("Rodrigo", "night"),
+    # blues
+    ("Muddy Waters", "kitchen"), ("Stevie Ray Vaughan", "kitchen"),
+    ("Johnny Winter", "kitchen"),
+    # ghazal and bollywood
+    ("Nusrat", "marine"), ("Asha Bhosle", "marine"), ("KK", "marine"),
+    ("Bally Sagoo", "marine"),
 ]
 
-# followed on YouTube (channels / topic channels)
+# followed on YouTube (channels / topic channels), by scene
 ARTISTS = {
-    "wired": ["Iron Maiden", "Judas Priest", "Kreator", "Whitechapel", "I See Stars",
-              "The Browning", "Make Them Suffer", "Clutch", "Wu-Tang Clan", "Rock The Bells"],
-    "still": ["Brian Eno", "Ryo Fukui", "Paul Desmond", "Gerry Mulligan", "Essential Classics"],
-    "warm": ["Mehdi Hassan", "Frank Sinatra", "Peter Gabriel", "Pink Floyd"],
-    "focused": ["Johnny Winter", "Eric Clapton", "Vulfpeck", "Jordan Rudess", "Ichika Nito",
-                "The Strokes", "Justice", "BICEP", "Digitalism", "Fatboy Slim"],
+    "kitchen": ["Johnny Winter", "Eric Clapton", "Muddy Waters", "Stevie Ray Vaughan"],
+    "rain": ["Brian Eno", "Vangelis", "Pink Floyd", "Peter Gabriel", "Essential Classics"],
+    "ledge": ["Iron Maiden", "Judas Priest", "Kreator", "Whitechapel", "I See Stars",
+              "The Browning", "Make Them Suffer", "Clutch", "The Strokes"],
+    "paan": ["Wu-Tang Clan", "Rock The Bells"],
+    "marine": ["Mehdi Hassan"],
+    "night": ["Ryo Fukui", "Paul Desmond", "Gerry Mulligan", "Frank Sinatra"],
 }
 
 
-def mood_for(artist):
-    for needle, mood in TRACK_MOOD:
+def scene_for(artist):
+    for needle, scene in TRACK_SCENE:
         if needle.lower() in artist.lower():
-            return mood
-    raise SystemExit(f"no mood for {artist}")
+            return scene
+    raise SystemExit(f"no scene for {artist}")
 
 
 def main():
@@ -58,16 +78,18 @@ def main():
         if not line.strip():
             continue
         artist, title, vid = line.split("|")
-        tracks.append({"artist": artist, "title": title, "yt": vid, "mood": mood_for(artist)})
+        tracks.append({"artist": artist, "title": title, "yt": vid, "scene": scene_for(artist)})
     out = {
-        "moods": [dict(m, artists=ARTISTS[m["id"]],
-                       tracks=[t for t in tracks if t["mood"] == m["id"]]) for m in MOODS]
+        "scenes": [dict(s, artists=ARTISTS[s["id"]],
+                        tracks=[{k: t[k] for k in ("artist", "title", "yt")}
+                                for t in tracks if t["scene"] == s["id"]])
+                   for s in SCENES]
     }
     dest = ROOT / "docs" / "data"
     dest.mkdir(parents=True, exist_ok=True)
     (dest / "lulu.json").write_text(json.dumps(out, ensure_ascii=False, indent=1))
-    for m in out["moods"]:
-        print(m["id"], len(m["tracks"]), "tracks,", len(m["artists"]), "artists")
+    for s in out["scenes"]:
+        print(s["id"], len(s["tracks"]), "tracks,", len(s["artists"]), "artists")
 
 
 if __name__ == "__main__":

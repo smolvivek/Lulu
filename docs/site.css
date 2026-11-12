@@ -1,0 +1,165 @@
+/* Lulu. One full-bleed frame per scene, quiet controls on a dark scrim.
+   Single deliberate dark look: the frames carry the colour. */
+:root {
+  --stage: #14100d;
+  --cream: #f4ece0;
+  --cream-dim: #cbbfae;
+  --terracotta: #c97a56;
+  --dusty-blue: #9db2c4;
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --gutter-l: max(clamp(20px, 3.4vw, 64px), env(safe-area-inset-left, 0px));
+  --gutter-r: max(clamp(20px, 3.4vw, 64px), env(safe-area-inset-right, 0px));
+  --gutter-b: max(clamp(20px, 3vw, 52px), env(safe-area-inset-bottom, 0px));
+  --fade: 1.4s;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--stage);
+  color: var(--cream);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+button { font: inherit; color: inherit; }
+[hidden] { display: none !important; }
+
+.stage { position: fixed; inset: 0; overflow: hidden; background: var(--stage); }
+
+/* frames */
+.frames { position: absolute; inset: 0; }
+.frame {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  transition: opacity var(--fade) ease;
+  user-select: none; -webkit-user-drag: none;
+}
+.frame.is-active { opacity: 1; }
+
+.scrim {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(to top,
+    rgba(10,8,6,.82) 0%, rgba(10,8,6,.5) 22%, rgba(10,8,6,.12) 46%, rgba(10,8,6,0) 60%);
+}
+
+/* interface */
+.ui {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  gap: 20px;
+  padding: 0 var(--gutter-r) var(--gutter-b) var(--gutter-l);
+  opacity: 0; pointer-events: none;
+  transition: opacity .8s ease .3s;
+}
+body.entered .ui { opacity: 1; pointer-events: auto; }
+
+.info { max-width: 34rem; display: flex; flex-direction: column; gap: 4px; }
+.genre { margin: 0; font-size: .9rem; color: var(--dusty-blue); letter-spacing: .02em; }
+.scene-name {
+  margin: 0;
+  font-family: var(--display); font-weight: 450;
+  font-variation-settings: 'SOFT' 100;
+  font-size: clamp(2.4rem, 6.2vw, 4.8rem); line-height: 1.02;
+  text-wrap: balance;
+  text-shadow: 0 2px 24px rgba(0,0,0,.45);
+}
+.line { margin: 4px 0 0; font-size: 1.02rem; color: var(--cream-dim); text-shadow: 0 1px 14px rgba(0,0,0,.5); }
+.now {
+  margin: 14px 0 0; min-height: 1.4em;
+  display: flex; align-items: center; gap: 10px;
+  font-size: .95rem; color: var(--cream);
+  text-shadow: 0 1px 12px rgba(0,0,0,.55);
+}
+.now:empty { display: none; }
+.eq { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; width: 14px; flex: none; }
+.eq i { display: block; width: 3px; height: 4px; background: var(--terracotta); border-radius: 1px; }
+body.playing .eq i { animation: eq 1s ease-in-out infinite; }
+body.playing .eq i:nth-child(2) { animation-delay: -.35s; }
+body.playing .eq i:nth-child(3) { animation-delay: -.7s; }
+@keyframes eq { 0%,100% { height: 4px; } 50% { height: 12px; } }
+
+.bar { display: flex; align-items: center; justify-content: space-between; gap: 16px; transition: opacity .6s ease; }
+body.idle .bar { opacity: 0; }
+body.idle .bar:focus-within { opacity: 1; }
+
+.dots { display: flex; align-items: center; gap: 2px; }
+.dot {
+  position: relative; appearance: none; border: 0; background: none; cursor: pointer;
+  width: 30px; height: 30px; padding: 0;
+  display: grid; place-items: center;
+}
+.dot::before {
+  content: ""; display: block; width: 9px; height: 9px; border-radius: 99px;
+  background: rgba(244,236,224,.42);
+  transition: width .35s ease, background .35s ease;
+}
+.dot:hover::before { background: rgba(244,236,224,.8); }
+.dot[aria-current="true"]::before { width: 26px; background: var(--cream); }
+.dot:focus-visible, .ctl:focus-visible, .enter-btn:focus-visible { outline: 2px solid var(--dusty-blue); outline-offset: 3px; border-radius: 99px; }
+
+.controls { display: flex; gap: 10px; }
+.ctl {
+  appearance: none; cursor: pointer;
+  width: 46px; height: 46px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 1px solid rgba(244,236,224,.3);
+  background: rgba(20,16,13,.35);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  transition: background .2s ease, border-color .2s ease;
+}
+.ctl:hover { background: rgba(244,236,224,.14); border-color: rgba(244,236,224,.55); }
+.ctl svg { width: 20px; height: 20px; fill: var(--cream); }
+.ctl .i-pause { display: none; }
+body.playing .ctl .i-play { display: none; }
+body.playing .ctl .i-pause { display: block; }
+
+/* enter screen */
+.enter {
+  position: absolute; inset: 0; z-index: 5;
+  display: grid; place-items: center; text-align: center;
+  padding: 24px max(24px, env(safe-area-inset-right, 0px)) 24px max(24px, env(safe-area-inset-left, 0px));
+  background: radial-gradient(ellipse at 50% 55%, rgba(14,10,8,.5), rgba(14,10,8,.78));
+  transition: opacity 1.1s ease, visibility 0s linear 1.1s;
+}
+body.entered .enter { opacity: 0; visibility: hidden; pointer-events: none; }
+.enter-inner { max-width: 30rem; display: flex; flex-direction: column; align-items: center; gap: 14px; }
+.enter h1 {
+  margin: 0; font-family: var(--display); font-weight: 400;
+  font-variation-settings: 'SOFT' 100;
+  font-size: clamp(4.5rem, 16vw, 9rem); line-height: .95; letter-spacing: -.01em;
+}
+.enter p { margin: 0; color: var(--cream-dim); font-size: 1.05rem; line-height: 1.5; text-wrap: balance; }
+.enter-btn {
+  appearance: none; cursor: pointer; margin-top: 12px;
+  padding: 14px 40px; border-radius: 99px;
+  border: 1px solid rgba(244,236,224,.55);
+  background: rgba(244,236,224,.08);
+  font-size: 1.05rem; letter-spacing: .02em;
+  transition: background .25s ease, border-color .25s ease;
+}
+.enter-btn:hover { background: var(--cream); color: #1b1511; border-color: var(--cream); }
+.enter .hint { font-size: .85rem; color: var(--dusty-blue); }
+
+/* hidden audio player; kept in layout (not display:none) so the embed still plays */
+.yt-host { position: fixed; left: 0; bottom: 0; width: 2px; height: 2px; overflow: hidden; opacity: .01; pointer-events: none; }
+.yt-host iframe { width: 200px; height: 200px; }
+
+.nojs { position: fixed; inset: auto 0 40% 0; text-align: center; color: var(--cream); }
+
+@media (max-width: 640px) {
+  .bar { gap: 8px; }
+  .dot { width: 26px; }
+  .ctl { width: 44px; height: 44px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --fade: .01s; }
+  .ui, .enter, .bar { transition-duration: .01s; transition-delay: 0s; }
+  body.playing .eq i { animation: none; height: 8px; }
+}

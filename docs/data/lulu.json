@@ -1,221 +1,122 @@
 {
- "moods": [
+ "scenes": [
   {
-   "id": "focused",
-   "name": "Focused",
-   "line": "Coffee, laptop, one cat on the desk.",
-   "default": true,
+   "id": "kitchen",
+   "name": "Kitchen",
+   "genre": "Blues",
+   "line": "Something is on the stove.",
+   "focal": 30,
    "artists": [
     "Johnny Winter",
     "Eric Clapton",
-    "Vulfpeck",
-    "Jordan Rudess",
-    "Ichika Nito",
-    "The Strokes",
-    "Justice",
-    "BICEP",
-    "Digitalism",
-    "Fatboy Slim"
+    "Muddy Waters",
+    "Stevie Ray Vaughan"
    ],
    "tracks": [
     {
-     "artist": "Wes Montgomery",
-     "title": "Days Of Wine And Roses",
-     "yt": "JadIhIihTFw",
-     "mood": "focused"
-    },
-    {
-     "artist": "Django Reinhardt",
-     "title": "Minor Swing",
-     "yt": "uTlo809EIlo",
-     "mood": "focused"
-    },
-    {
-     "artist": "Sonny Rollins",
-     "title": "Where Are You",
-     "yt": "lZBq6h-ufLE",
-     "mood": "focused"
-    },
-    {
      "artist": "Muddy Waters",
      "title": "Mannish Boy",
-     "yt": "bSfqNEvykv0",
-     "mood": "focused"
+     "yt": "bSfqNEvykv0"
     },
     {
      "artist": "Stevie Ray Vaughan",
      "title": "Tin Pan Alley",
-     "yt": "LNX4Bl4T1q0",
-     "mood": "focused"
+     "yt": "LNX4Bl4T1q0"
     },
     {
      "artist": "Johnny Winter",
      "title": "Be Careful With a Fool",
-     "yt": "8Tyg5SJDpiQ",
-     "mood": "focused"
-    },
-    {
-     "artist": "Orbital",
-     "title": "Tiny Foldable Cities",
-     "yt": "7CC5aX8OzOI",
-     "mood": "focused"
-    },
-    {
-     "artist": "Steve Reich",
-     "title": "Electric Counterpoint III Fast",
-     "yt": "_e1orvlevCQ",
-     "mood": "focused"
-    },
-    {
-     "artist": "DJ Shadow",
-     "title": "Fixed Income",
-     "yt": "YziBSsHfQUA",
-     "mood": "focused"
+     "yt": "8Tyg5SJDpiQ"
     }
    ]
   },
   {
-   "id": "still",
-   "name": "Still",
+   "id": "rain",
+   "name": "Rain",
+   "genre": "Ambient",
    "line": "Nobody is going anywhere.",
-   "default": false,
+   "focal": 48,
    "artists": [
     "Brian Eno",
-    "Ryo Fukui",
-    "Paul Desmond",
-    "Gerry Mulligan",
+    "Vangelis",
+    "Pink Floyd",
+    "Peter Gabriel",
     "Essential Classics"
    ],
    "tracks": [
     {
-     "artist": "Bill Evans",
-     "title": "Peace Piece",
-     "yt": "Nv2GgV34qIg",
-     "mood": "still"
-    },
-    {
-     "artist": "Chet Baker Quartet",
-     "title": "Moon Love",
-     "yt": "SeqeWML44L0",
-     "mood": "still"
-    },
-    {
      "artist": "Aphex Twin",
      "title": "Ageispolis",
-     "yt": "CJsiDDI-7Xw",
-     "mood": "still"
+     "yt": "CJsiDDI-7Xw"
     },
     {
      "artist": "Aphex Twin",
      "title": "aisatsana",
-     "yt": "3_MRe3JwFc8",
-     "mood": "still"
+     "yt": "3_MRe3JwFc8"
     },
     {
      "artist": "Boards of Canada",
      "title": "Roygbiv",
-     "yt": "SM4tQcUt_mQ",
-     "mood": "still"
+     "yt": "SM4tQcUt_mQ"
     },
     {
      "artist": "William Basinski",
      "title": "dlp 1.3",
-     "yt": "R7EjJnBHuFY",
-     "mood": "still"
+     "yt": "R7EjJnBHuFY"
     },
     {
      "artist": "Harold Budd & Brian Eno",
      "title": "An Arc Of Doves",
-     "yt": "9_frHl9zybU",
-     "mood": "still"
+     "yt": "9_frHl9zybU"
     },
     {
      "artist": "Four Tet",
      "title": "Two Thousand and Seventeen",
-     "yt": "CUYboWbVe0A",
-     "mood": "still"
+     "yt": "CUYboWbVe0A"
     },
     {
      "artist": "Global Communication",
      "title": "8:07",
-     "yt": "jFx-Rx6PfCw",
-     "mood": "still"
+     "yt": "jFx-Rx6PfCw"
+    },
+    {
+     "artist": "Orbital",
+     "title": "Tiny Foldable Cities",
+     "yt": "7CC5aX8OzOI"
+    },
+    {
+     "artist": "Steve Reich",
+     "title": "Electric Counterpoint III Fast",
+     "yt": "_e1orvlevCQ"
     },
     {
      "artist": "Dvořák / Kian Soltani",
      "title": "Silent Woods",
-     "yt": "v01H7QYcgwE",
-     "mood": "still"
+     "yt": "v01H7QYcgwE"
     },
     {
      "artist": "Debussy / Paul Galbraith",
      "title": "La fille aux cheveux de lin",
-     "yt": "Bwsk-dQ3S5M",
-     "mood": "still"
-    },
-    {
-     "artist": "Clint Mansell & Kronos Quartet",
-     "title": "Hope Overture",
-     "yt": "w9eUtHYwty0",
-     "mood": "still"
-    }
-   ]
-  },
-  {
-   "id": "warm",
-   "name": "Warm",
-   "line": "Window seat. Golden light.",
-   "default": false,
-   "artists": [
-    "Mehdi Hassan",
-    "Frank Sinatra",
-    "Peter Gabriel",
-    "Pink Floyd"
-   ],
-   "tracks": [
-    {
-     "artist": "Nat King Cole",
-     "title": "Caravan",
-     "yt": "vHZJP2pfv6I",
-     "mood": "warm"
-    },
-    {
-     "artist": "Nusrat Fateh Ali Khan",
-     "title": "Manaqib Khawaja Mueenuddin Chishti",
-     "yt": "daKWzgvwwms",
-     "mood": "warm"
-    },
-    {
-     "artist": "Asha Bhosle",
-     "title": "Haule Haule Chalo Mere Sajna",
-     "yt": "4e-I6IDBgK0",
-     "mood": "warm"
-    },
-    {
-     "artist": "Rodrigo / Thibaut Garcia",
-     "title": "Concierto de Aranjuez: Adagio",
-     "yt": "Mdrt1BEAc5Y",
-     "mood": "warm"
+     "yt": "Bwsk-dQ3S5M"
     },
     {
      "artist": "Vangelis",
      "title": "Abraham's Theme",
-     "yt": "Rc4y3mdBTic",
-     "mood": "warm"
+     "yt": "Rc4y3mdBTic"
     },
     {
-     "artist": "KK",
-     "title": "Kaise Mein Kahun Tujhse",
-     "yt": "4Vil1bN_pI4",
-     "mood": "warm"
+     "artist": "Clint Mansell & Kronos Quartet",
+     "title": "Hope Overture",
+     "yt": "w9eUtHYwty0"
     }
    ]
   },
   {
-   "id": "wired",
-   "name": "Wired",
+   "id": "ledge",
+   "name": "The ledge",
+   "genre": "Rock and metal",
    "line": "She is out the window again.",
-   "default": false,
+   "focal": 50,
    "artists": [
     "Iron Maiden",
     "Judas Priest",
@@ -225,117 +126,193 @@
     "The Browning",
     "Make Them Suffer",
     "Clutch",
-    "Wu-Tang Clan",
-    "Rock The Bells"
+    "The Strokes"
    ],
    "tracks": [
     {
      "artist": "IDLES",
      "title": "MTT 420 RR",
-     "yt": "drLL2aCPNtc",
-     "mood": "wired"
+     "yt": "drLL2aCPNtc"
     },
     {
      "artist": "IDLES",
      "title": "Car Crash",
-     "yt": "Cw7jOq0op5E",
-     "mood": "wired"
+     "yt": "Cw7jOq0op5E"
     },
     {
      "artist": "Sleep Token",
      "title": "The Summoning",
-     "yt": "wJNbtYdr-Hg",
-     "mood": "wired"
+     "yt": "wJNbtYdr-Hg"
     },
     {
      "artist": "Whitechapel",
      "title": "The Saw Is the Law",
-     "yt": "eVI6c0TlM2g",
-     "mood": "wired"
+     "yt": "eVI6c0TlM2g"
     },
     {
      "artist": "Chelsea Grin",
      "title": "Desolation Of Eden",
-     "yt": "lNMueXXjZsU",
-     "mood": "wired"
+     "yt": "lNMueXXjZsU"
     },
     {
      "artist": "Alex Terrible",
      "title": "Doom Slayer",
-     "yt": "lw5HcXHRkjg",
-     "mood": "wired"
+     "yt": "lw5HcXHRkjg"
     },
     {
      "artist": "The Sword",
      "title": "The Black River",
-     "yt": "KcVxcwXpC_8",
-     "mood": "wired"
+     "yt": "KcVxcwXpC_8"
     },
     {
      "artist": "Truckfighters",
      "title": "A. Zapruder",
-     "yt": "67v4U1MnCQc",
-     "mood": "wired"
+     "yt": "67v4U1MnCQc"
     },
     {
      "artist": "Valley of the Sun",
      "title": "Old Gods",
-     "yt": "sYwBT_0znTE",
-     "mood": "wired"
+     "yt": "sYwBT_0znTE"
     },
     {
      "artist": "Architects",
      "title": "Animals",
-     "yt": "jdWhJcrrjQs",
-     "mood": "wired"
-    },
+     "yt": "jdWhJcrrjQs"
+    }
+   ]
+  },
+  {
+   "id": "paan",
+   "name": "Paan tapri",
+   "genre": "Hip-hop",
+   "line": "Nap on the scooty.",
+   "focal": 38,
+   "artists": [
+    "Wu-Tang Clan",
+    "Rock The Bells"
+   ],
+   "tracks": [
     {
      "artist": "Gang Starr & Inspectah Deck",
      "title": "Above The Clouds",
-     "yt": "9pNJHDrPAYg",
-     "mood": "wired"
+     "yt": "9pNJHDrPAYg"
     },
     {
      "artist": "Mobb Deep",
      "title": "Shook Ones, Pt. II",
-     "yt": "yoYZf-lBF_U",
-     "mood": "wired"
+     "yt": "yoYZf-lBF_U"
     },
     {
      "artist": "Beastie Boys",
      "title": "Flute Loop",
-     "yt": "HOvvFwnygXU",
-     "mood": "wired"
+     "yt": "HOvvFwnygXU"
     },
     {
      "artist": "Jay-Z & UGK",
      "title": "Big Pimpin'",
-     "yt": "Cgoqrgc_0cM",
-     "mood": "wired"
+     "yt": "Cgoqrgc_0cM"
     },
     {
      "artist": "Skepta",
      "title": "Man",
-     "yt": "sOhxPhqzMwg",
-     "mood": "wired"
+     "yt": "sOhxPhqzMwg"
+    },
+    {
+     "artist": "DJ Shadow",
+     "title": "Fixed Income",
+     "yt": "YziBSsHfQUA"
     },
     {
      "artist": "Cage",
      "title": "Agent Orange",
-     "yt": "4rh0c-ws8ZM",
-     "mood": "wired"
+     "yt": "4rh0c-ws8ZM"
     },
     {
      "artist": "Anderson .Paak & Cordae",
      "title": "Airbender",
-     "yt": "0Et2GIFVOfU",
-     "mood": "wired"
+     "yt": "0Et2GIFVOfU"
+    }
+   ]
+  },
+  {
+   "id": "marine",
+   "name": "Marine Drive",
+   "genre": "Ghazal and Bollywood",
+   "line": "Sunset, the three of us.",
+   "focal": 40,
+   "artists": [
+    "Mehdi Hassan"
+   ],
+   "tracks": [
+    {
+     "artist": "Nusrat Fateh Ali Khan",
+     "title": "Manaqib Khawaja Mueenuddin Chishti",
+     "yt": "daKWzgvwwms"
+    },
+    {
+     "artist": "Asha Bhosle",
+     "title": "Haule Haule Chalo Mere Sajna",
+     "yt": "4e-I6IDBgK0"
+    },
+    {
+     "artist": "KK",
+     "title": "Kaise Mein Kahun Tujhse",
+     "yt": "4Vil1bN_pI4"
     },
     {
      "artist": "Bally Sagoo & Malkit Singh",
      "title": "Gur Nalon Ishq Mitha",
-     "yt": "_rGz16v3CUM",
-     "mood": "wired"
+     "yt": "_rGz16v3CUM"
+    }
+   ]
+  },
+  {
+   "id": "night",
+   "name": "Terrace",
+   "genre": "Jazz",
+   "line": "Lights on in every window.",
+   "focal": 49,
+   "artists": [
+    "Ryo Fukui",
+    "Paul Desmond",
+    "Gerry Mulligan",
+    "Frank Sinatra"
+   ],
+   "tracks": [
+    {
+     "artist": "Bill Evans",
+     "title": "Peace Piece",
+     "yt": "Nv2GgV34qIg"
+    },
+    {
+     "artist": "Chet Baker Quartet",
+     "title": "Moon Love",
+     "yt": "SeqeWML44L0"
+    },
+    {
+     "artist": "Wes Montgomery",
+     "title": "Days Of Wine And Roses",
+     "yt": "JadIhIihTFw"
+    },
+    {
+     "artist": "Nat King Cole",
+     "title": "Caravan",
+     "yt": "vHZJP2pfv6I"
+    },
+    {
+     "artist": "Django Reinhardt",
+     "title": "Minor Swing",
+     "yt": "uTlo809EIlo"
+    },
+    {
+     "artist": "Sonny Rollins",
+     "title": "Where Are You",
+     "yt": "lZBq6h-ufLE"
+    },
+    {
+     "artist": "Rodrigo / Thibaut Garcia",
+     "title": "Concierto de Aranjuez: Adagio",
+     "yt": "Mdrt1BEAc5Y"
     }
    ]
   }
